@@ -1,6 +1,250 @@
+
+<style>
+ .hero_banner{
+   width:100%;
+   position: relative;
+    top: -90px;
+ } 
+  .hero_banner .hero_image {
+   width:100%;
+    height:auto;
+ }
+  .hero_banner .hero_image img{
+   width:100%;
+ }
+  .hero_banner .inner_hero_banner{
+    position:relative;
+  }
+  .hero_banner .hero_content{
+    position:absolute;
+    top:0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width:100%;
+    height:100%;
+  }
+  .hero_banner .hero_content h2{
+    max-width:620px;
+   color: var(--White, #FCFDFD);
+    text-align: center;
+    font-family: Fraunces;
+    font-size: 96px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 90%;  
+    letter-spacing: -4.8px;
+    margin:0 0 50px 0;
+  }
+  .hero_banner .hero_content a{
+    color: var(--Stormy, #323334);
+    font-family: "Source Sans Pro";
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 14px; /* 116.667% */
+    letter-spacing: 1.2px;
+    border-radius: 8px;
+    background: var(--Linen, #F8F4E7);
+    padding: 8px 36px;
+    align-items: center;
+    gap: 8px;
+    display:block;
+    margin:0 auto;
+    width:fit-content;
+    text-decoration:none;
+  }
+  .hero_banner .hero_mobile{
+    display:none;
+  }
+   .hero_banner .hero_desktop{
+    display:block;
+  }
+    @media only screen and (max-width: 1024px) {
+        .hero_banner .hero_mobile{
+    /* display:block; */
+  }
+   .hero_banner .hero_desktop{
+    /* display:none; */
+  }
+      .hero_banner .hero_content{
+    top:44px;
+      }
+      .hero_banner .hero_content h2{
+   color: var(--White, #FCFDFD);
+    text-align: center;
+    font-family: Fraunces;
+    font-size: 86px;
+      }
+
+  }
+    @media only screen and (max-width: 767px) {
+      .hero_banner .hero_content h2{
+    max-width:390px;
+   color: var(--White, #FCFDFD);
+    text-align: center;
+    font-family: Fraunces;
+    font-size: 56px;}
+  }
+</style>
+{% style %}
+    #hero_banner-{{section.id}} .primary_btn{
+     color:{{section.settings.Desktop_buttonText_color}};
+     background-color:{{section.settings.Desktop_buttonbg_color}};
+      border:{{ section.settings.border_outline}};
+   }   
+   #hero_banner-{{section.id}} h2 {
+    color: {{section.settings.desktop_font_color}};
+  }
+    #hero_banner-{{section.id}}  {
+    background: {{section.settings.desktop_bg_color}};
+  }
+ @media screen and (max-width: 991px) {
+    #hero_banner-{{section.id}} .primary_btn{
+       color:{{section.settings.Mobile_buttonText_color}};
+       background-color:{{section.settings.Mobile_buttonbg_color}};
+      border:{{ section.settings.mobileborder_outline}};
+     
+   } 
+   #hero_banner-{{section.id}} h2 {
+      color: {{section.settings.mobile_font_color}};
+    }
+ }
+  {% endstyle %}
+<section class="hero_banner" id="hero_banner-{{ section.id }}">
+        <div class="container">
+            <div class="inner_hero_banner">
+              {% if section.settings.background_type == 'image' %}  
+                <div class="hero_image">
+                   {% if section.settings.desktop_image != blank %}
+                 {{ section.settings.desktop_image | image_url:width:section.settings.desktop_image.width | image_tag:class:'hero_desktop' ,loading:'lazy' }}
+                  {% endif %}
+                    {% if section.settings.mobile_image != blank %}
+                    {{ section.settings.mobile_image | image_url:width:section.settings.mobile_image.width | image_tag:class:'hero_mobile' ,loading:'lazy' }}
+                    {% endif %}
+                      </div>
+                      {% endif %}
+                     {% if section.settings.background_type == 'video' %}  
+                   <div class="hero_video">
+                  {% if section.settings.desktop_video != blank %}
+                   {{ section.settings.desktop_video | video_tag: autoplay: true, loop: true, muted: true, class:'hero_desktop' }}
+                  {% endif %}
+                {% if section.settings.mobile_video != blank %}
+               {{ section.settings.mobile_video | video_tag: autoplay: true, loop: true, muted: true, class:'hero_mobile' }}
+              {% endif %}
+            </div>
+              {% endif %}
+              <div class="hero_content">
+                {% if section.settings.headline != blank %}
+                   <h2>{{ section.settings.headline }}</h2>
+                  {% endif %}
+                 {% if section.settings.button != blank %}
+                   <a href="{{ section.settings.url }}" class="primary_btn">{{ section.settings.button }}</a>
+                  {% endif %}
+              </div>
+            </div>
+        </div>
+    </section>
 {% schema %}
   {
-    "name": "Section name",
-    "settings": []
+    "name": "Hero Banner",
+    "settings": [
+      {
+  "type": "select",
+  "id": "background_type",
+  "label": " Background Type",
+  "options": [
+    {
+      "value": "image",
+      "label": "Image"
+    },
+    {
+      "value": "Video",
+      "label": "Video"
+    }
+  ],
+  "default": "image"
+},
+    {
+  "type": "image_picker",
+  "id": "desktop_image",
+  "label": "Desktop Image"
+  },
+         {
+    "type": "image_picker",
+    "id": "mobile_image",
+    "label": "Mobile Image"
+  },
+           {
+    "type": "video",
+    "id": "mobile_video",
+    "label": "Desktop Video"
+  },
+      {
+    "type": "video",
+    "id": "desktop_video",
+    "label": "Mobile Video"
+  },
+         {
+    "type": "text",
+    "id": "headline",
+    "label": "Heading",
+    "default":"Seamless furniture with natural fabrics"
+  },
+         {
+    "type": "text",
+    "id": "button",
+    "label": "Button",
+   "default":"Shop All"
+  },
+           {
+    "type": "url",
+    "id": "url",
+    "label": "Url"
+  },
+        {
+      "type": "color",
+      "id": "Desktop_buttonbg_color",
+      "label": "Button1 Background Color"
+    },
+        {
+      "type": "color",
+     "id": "Desktop_buttonText_color",
+      "label": "Button Text Color"
+    },
+        {
+      "type": "color",
+      "id": "Mobile_buttonbg_color",
+      "label": "Button Background Color"
+    },
+        {
+      "type": "color",
+     "id": "Mobile_buttonText_color",
+      "label": "Mobile Button Text Color"
+    },
+        {
+      "type": "color",
+     "id": "border_outline",
+      "label": "Button Border Outline"
+    },
+      
+        {
+      "type": "color",
+     "id": "desktop_font_color",
+      "label": "Desktop Font Color"
+    },
+       {
+      "type": "color",
+     "id": "mobileborder_outline",
+      "label": "Mobile Button Border Outline"
+    },
+        {
+      "type": "color",
+     "id": "mobile_font_color",
+      "label": "Mobile Font Color"
+    }
+    ],
+    "presets": [{"name":"Hero Banner"}]
   }
 {% endschema %}
